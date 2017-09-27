@@ -1,0 +1,42 @@
+<arquillian xmlns="http://jboss.org/schema/arquillian"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="  
+        http://jboss.org/schema/arquillian  
+        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+  <defaultProtocol type="Servlet 3.0"/>
+
+  <container qualifier="fuse-test" default="true">
+    <configuration>
+      <property name="managementAddress">127.0.0.1</property>
+      <property name="managementPort">9999</property>
+      <property name="username">admin</property>
+      <property name="password">Passw0rd!</property>
+    </configuration>
+  </container>
+        
+  <extension qualifier="docker"> 
+    <property name="definitionFormat">CUBE</property>
+    <property name="dockerContainers">
+      fuse-test:
+        image: fuse_eap_admin:6.3.0
+        await:
+          strategy: sleeping
+          sleepTime: 30 s
+        portBindings: [8080/tcp, 9999/tcp]
+        restartPolicy:
+          name: failure
+          maximumRetryCount: 1
+        manual: false
+    </property>
+  </extension>
+
+  <!-- This enables the Arquillian JaCoCo Extension -->
+  <extension qualifier="jacoco"/>
+
+  <!-- This enables the Arquillian RestAssured Extension -->
+  <extension qualifier="restassured">
+    <property name="port">8080</property>
+  </extension>
+
+</arquillian>
