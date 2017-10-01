@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
@@ -51,18 +51,12 @@ public class GreeterTest {
   @Inject
   Greeter greeter;
 
-  @Test
-  @InSequence(1)
-  public void basicTest() {
-    assertThat(true, is(true));
-  }
-
   /***
    * This test uses an injected instance of our REST service to
    * do 'unit' style testing
    ***/
   @Test
-  @InSequence(2)
+  @InSequence(1)
   public void should_return_hello_world() {
     Assert.assertEquals("Hello World!", greeter.createGreeting(null).getEntity());
   }
@@ -77,7 +71,7 @@ public class GreeterTest {
    ***/
   @Test
   @RunAsClient
-  @InSequence(3)
+  @InSequence(2)
   public void injectTest() throws Exception {
 
     System.out.println("URL: " + url.toExternalForm());
@@ -92,12 +86,14 @@ public class GreeterTest {
   /***
    * This test shows RestAssured DSL testing 'outside'
    * the container using '@RunAsClient.
-   * This doesn't generate JaCoCo data
+   * This doesn't generate JaCoCo data _unless_ we
+   * execute a further test in the remote
+   * JVM - which triggers stats collection
    *
    */
   @Test
   @RunAsClient
-  @InSequence(4)
+  @InSequence(3)
   public void should_return_default_greeting() {
     given().
     when().
@@ -113,13 +109,37 @@ public class GreeterTest {
    *
    */
   @Test
-  @InSequence(5)
-  public void should_return_personal_greeting() {
+  @InSequence(4)
+  public void should_return_request_logged() {
     given().
     when().
       get(url.toExternalForm() + "?name=Bar").
     then().
       statusCode(202);
+  }
+
+  @Test
+  @RunAsClient
+  @InSequence(5)
+  public void should_return_personal_greeting() {
+    given().
+    when().
+      get(url.toExternalForm() + "?name=Foo").
+    then().
+      statusCode(200).
+      body(is("Hello, Foo!"));
+  }
+
+  /***
+   * This is a dummy method used solely to
+   * generate JaCoCo stats by running a test
+   * in the remote container JVM
+   *
+   */
+  @Test
+  @InSequence(999)
+  public void dummy_to_capture_stats() {
+    Assert.assertTrue(true);
   }
 
 }

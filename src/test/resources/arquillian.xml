@@ -31,12 +31,4 @@
     </property>
   </extension>
 
-  <!-- This enables the Arquillian JaCoCo Extension -->
-  <extension qualifier="jacoco"/>
-
-  <!-- This enables the Arquillian RestAssured Extension -->
-  <extension qualifier="restassured">
-    <property name="port">8080</property>
-  </extension>
-
 </arquillian>

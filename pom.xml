@@ -13,7 +13,7 @@
     <version.maven.surefire>2.20.1</version.maven.surefire>
     <version.maven.docker>0.21.0</version.maven.docker>
     <version.arquillian.universe>1.1.13.7</version.arquillian.universe>
-    <version.jacoco>0.7.8</version.jacoco>
+    <version.jacoco>0.7.9</version.jacoco>
     <version.arquillian.jacoco>1.0.0.Alpha9</version.arquillian.jacoco>
     <version.restassured>3.0.2</version.restassured>
   </properties>
@@ -67,12 +67,6 @@
       <artifactId>org.jacoco.core</artifactId>
       <version>${version.jacoco}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.arquillian.universe</groupId>
-      <artifactId>arquillian-cube-docker-restassured</artifactId>
-      <scope>test</scope>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
@@ -192,7 +186,9 @@
           <groupId>org.jboss.arquillian.protocol</groupId>
           <artifactId>arquillian-protocol-servlet</artifactId>
           <scope>test</scope>
+          <!--
           <version>1.1.13.Final</version>
+          -->
         </dependency>
       </dependencies>
     </profile>
